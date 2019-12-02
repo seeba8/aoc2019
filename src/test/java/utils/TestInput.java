@@ -17,6 +17,16 @@ public class TestInput {
         catch(Exception e) {
             fail("could not read file");
         }
+    }
 
+    @Test
+    public void testSingleLineArray() {
+        try {
+            assertArrayEquals(new int[]{1, 0, 0, 3, 1},
+                    Arrays.copyOf(Input.getIntArrayFromSingleLine("day2.txt",","),5));
+        }
+        catch(Exception e) {
+            fail("could not read file");
+        }
     }
 }
