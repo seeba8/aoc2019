@@ -65,11 +65,10 @@ public class Wires {
     }
 
     public int getMinimumIntersectDistance() {
-        return Arrays.stream(getAllIntersectDistances()).min().getAsInt();
+        return Arrays.stream(getAllIntersectDistances()).min().orElseThrow(IllegalStateException::new);
     }
 
     public int getShortestWireLengthIntersection() {
-        List<Point<Integer>> intersections = new ArrayList<>();
         int w1Length = 0;
         List<Integer> lengthAtIntersections = new ArrayList<>();
         for (Wire first : w1) {
@@ -78,7 +77,6 @@ public class Wires {
                 if (first.intersects(second)) {
                     Point<Integer> intersect = first.getIntersectPoint(second);
                     if (!intersect.equals(new Point<Integer>(0, 0))) {
-                        intersections.add(intersect);
                         lengthAtIntersections.add(
                                 w1Length + first.getDistanceToPoint(intersect, true)
                                         + w2Length + second.getDistanceToPoint(intersect, true));
@@ -88,7 +86,7 @@ public class Wires {
             }
             w1Length += first.getLength();
         }
-        return lengthAtIntersections.stream().mapToInt(i -> i).min().getAsInt();
+        return lengthAtIntersections.stream().mapToInt(i -> i).min().orElseThrow(IllegalStateException::new);
     }
 
     public static void main(String[] args) {

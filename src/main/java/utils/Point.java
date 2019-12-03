@@ -17,7 +17,14 @@ public class Point<T> {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Point<T> other = (Point<T>) obj;
-        return this.x == other.x && this.y == other.y;
+        try {
+            @SuppressWarnings("unchecked")
+            Point<T> other = (Point<T>) obj;
+            return this.x == other.x && this.y == other.y;
+        }
+        catch(Exception e) {
+            return false;
+        }
+
     }
 }
