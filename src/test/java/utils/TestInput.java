@@ -2,6 +2,8 @@ package utils;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
@@ -28,5 +30,21 @@ public class TestInput {
         catch(Exception e) {
             fail("could not read file");
         }
+    }
+
+    @Test
+    public void testlinesSplit() {
+        try {
+            String[][] result = Input.getLinesSplit("day3.txt",",");
+            assertEquals(2,result.length);
+            assertArrayEquals("R1004,U518,R309,D991,R436".split(","),
+                    Arrays.copyOf(result[0],5));
+            assertArrayEquals("L998,U952,R204,U266,R353".split(","),
+                    Arrays.copyOf(result[1],5));
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+
     }
 }

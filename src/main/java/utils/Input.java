@@ -32,4 +32,12 @@ public class Input {
                 .mapToInt(Integer::parseInt)
                 .toArray();
     }
+
+    public static String[][] getLinesSplit(String filename, String separator) throws URISyntaxException, IOException {
+        Path p = Paths.get(Input.class.getClassLoader().getResource(filename).toURI());
+        return Files.readAllLines(p)
+                .stream()
+                .map(line -> line.split(separator))
+                .toArray(String[][]::new);
+    }
 }
