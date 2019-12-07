@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class AdvancedIntcodeComputer extends IntcodeComputer {
-    public int getInput() {
+    protected int getInput() {
         return input;
     }
 
@@ -38,11 +38,11 @@ public class AdvancedIntcodeComputer extends IntcodeComputer {
                 instrPointer += 4;
                 break;
             case 3:
-                programme[programme[instrPointer + 1]] = this.input;
+                programme[programme[instrPointer + 1]] = getInput();
                 instrPointer += 2;
                 break;
             case 4:
-                System.out.println(getParam1(param1IsPosition));
+                output(getParam1(param1IsPosition));
                 instrPointer += 2;
                 break;
             case 5:
@@ -75,6 +75,10 @@ public class AdvancedIntcodeComputer extends IntcodeComputer {
                 throw new IndexOutOfBoundsException("Unknown opcode");
         }
         return true;
+    }
+
+    protected void output(int value) {
+        System.out.println(value);
     }
 
     private int getParam1(boolean param1IsPosition) {
