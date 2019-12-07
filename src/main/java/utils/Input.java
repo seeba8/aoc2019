@@ -33,6 +33,11 @@ public class Input {
                 .toArray();
     }
 
+    public static String[] getLines(String filename) throws IOException, URISyntaxException {
+        Path p = Paths.get(Input.class.getClassLoader().getResource(filename).toURI());
+        return Files.readAllLines(p).toArray(new String[]{});
+    }
+
     public static String[][] getLinesSplit(String filename, String separator) throws URISyntaxException, IOException {
         Path p = Paths.get(Input.class.getClassLoader().getResource(filename).toURI());
         return Files.readAllLines(p)
