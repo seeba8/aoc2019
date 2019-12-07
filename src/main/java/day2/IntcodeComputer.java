@@ -6,31 +6,37 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class IntcodeComputer {
-    int[] programme;
-
+    protected int[] programme;
+    protected int instrPointer = 0;
     public IntcodeComputer(int[] input) {
         this.programme = input;
     }
 
     public int run() {
-        executeOpcode(0);
+        instrPointer = 0;
+        while(true){
+            if (!executeOpcode()) break;
+        };
         return this.programme[0];
     }
-
-    private void executeOpcode(int position) {
-        switch (programme[position]) {
+    /**
+     * @return false when opcode 99 is reached
+     */
+    protected boolean executeOpcode() {
+        switch (programme[instrPointer]) {
             case 1:
-                programme[programme[position + 3]] = programme[programme[position + 1]] + programme[programme[position + 2]];
+                programme[programme[instrPointer + 3]] = programme[programme[instrPointer + 1]] + programme[programme[instrPointer + 2]];
                 break;
             case 2:
-                programme[programme[position + 3]] = programme[programme[position + 1]] * programme[programme[position + 2]];
+                programme[programme[instrPointer + 3]] = programme[programme[instrPointer + 1]] * programme[programme[instrPointer + 2]];
                 break;
             case 99:
-                return;
+                return false;
             default:
                 throw new IndexOutOfBoundsException("Unknown opcode");
         }
-        executeOpcode(position + 4);
+        instrPointer += 4;
+        return true;
     }
 
     public void parseInput(int noun, int verb) {
