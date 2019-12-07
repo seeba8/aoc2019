@@ -7,18 +7,36 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class AdvancedIntcodeComputer extends IntcodeComputer {
+    private int input;
+
+    public AdvancedIntcodeComputer(int[] programme, int input) {
+        super(programme);
+        this.input = input;
+    }
+
+    public static void main(String[] args) {
+        int[] input;
+        try {
+            input = Input.getIntArrayFromSingleLine("day5.txt", ",");
+
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("Diagnostic code of Aircon: ");
+        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(input.clone(), 1);
+        c.run();
+
+        System.out.println("Diagnostic code of thermal radiator controller:");
+        c = new AdvancedIntcodeComputer(input.clone(), 5);
+        c.run();
+    }
+
     protected int getInput() {
         return input;
     }
 
     public void setInput(int input) {
-        this.input = input;
-    }
-
-    private int input;
-
-    public AdvancedIntcodeComputer(int[] programme, int input) {
-        super(programme);
         this.input = input;
     }
 
@@ -89,23 +107,5 @@ public class AdvancedIntcodeComputer extends IntcodeComputer {
     private int getParam2(boolean param2IsPosition) {
         if (param2IsPosition) return programme[programme[instrPointer + 2]];
         return programme[instrPointer + 2];
-    }
-
-    public static void main(String[] args) {
-        int[] input;
-        try {
-            input = Input.getIntArrayFromSingleLine("day5.txt", ",");
-
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-            return;
-        }
-        System.out.println("Diagnostic code of Aircon: ");
-        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(input.clone(), 1);
-        c.run();
-
-        System.out.println("Diagnostic code of thermal radiator controller:");
-        c = new AdvancedIntcodeComputer(input.clone(), 5);
-        c.run();
     }
 }

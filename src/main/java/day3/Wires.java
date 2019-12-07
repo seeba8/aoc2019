@@ -21,6 +21,19 @@ public class Wires {
         fillWireList(input2, w2);
     }
 
+    public static void main(String[] args) {
+        String[][] inputLines;
+        try {
+            inputLines = Input.getLinesSplit("day3.txt", ",");
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        Wires w = new Wires(inputLines[0], inputLines[1]);
+        System.out.println("Closest intersection is " + w.getMinimumIntersectDistance() + " units away.");
+        System.out.println("Shortest wire length to intersection is " + w.getShortestWireLengthIntersection() + " units.");
+    }
+
     private void fillWireList(String[] input, List<Wire> w) {
         int x = 0, y = 0;
         for (String section : input) {
@@ -87,18 +100,5 @@ public class Wires {
             w1Length += first.getLength();
         }
         return lengthAtIntersections.stream().mapToInt(i -> i).min().orElseThrow(IllegalStateException::new);
-    }
-
-    public static void main(String[] args) {
-        String[][] inputLines;
-        try {
-            inputLines = Input.getLinesSplit("day3.txt", ",");
-        } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        Wires w = new Wires(inputLines[0], inputLines[1]);
-        System.out.println("Closest intersection is " + w.getMinimumIntersectDistance() + " units away.");
-        System.out.println("Shortest wire length to intersection is " + w.getShortestWireLengthIntersection() + " units.");
     }
 }

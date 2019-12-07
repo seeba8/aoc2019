@@ -21,18 +21,6 @@ public class OrbitMap {
         }
     }
 
-    public Planet getPlanet(String name) {
-        return planets.get(name);
-    }
-
-    public int getTotalNumberOfOrbits() {
-        return planets.values().stream().mapToInt(Planet::getNumberOfOrbits).sum();
-    }
-
-    public Planet getCenterOfMass() {
-        return planets.get("COM");
-    }
-
     public static void main(String[] args) {
         OrbitMap map;
 
@@ -45,5 +33,17 @@ public class OrbitMap {
         System.out.printf("Total number of direct and indirect orbits is %d\n", map.getTotalNumberOfOrbits());
         System.out.printf("Number of orbital transfers needed is %d\n", map.getPlanet("YOU")
                 .getNumberOfTransfersTo(map.getPlanet("SAN")));
+    }
+
+    public Planet getPlanet(String name) {
+        return planets.get(name);
+    }
+
+    public int getTotalNumberOfOrbits() {
+        return planets.values().stream().mapToInt(Planet::getNumberOfOrbits).sum();
+    }
+
+    public Planet getCenterOfMass() {
+        return planets.get("COM");
     }
 }

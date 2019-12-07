@@ -11,6 +11,12 @@ public class Password {
         this.maximum = maximum;
     }
 
+    public static void main(String[] args) {
+        Password p = new Password(123257, 647015);
+        System.out.printf("There are %d possible passwords\n", p.countValid());
+        System.out.printf("With exact twins, there are %d possible passwords\n", p.countValid(true));
+    }
+
     public boolean isValid(int password) {
         return password >= minimum
                 && password <= maximum
@@ -48,11 +54,5 @@ public class Password {
             if (isValid(i) && (!exactTwin || hasExactTwin(i))) c++;
         }
         return c;
-    }
-
-    public static void main(String[] args) {
-        Password p = new Password(123257, 647015);
-        System.out.printf("There are %d possible passwords\n", p.countValid());
-        System.out.printf("With exact twins, there are %d possible passwords\n", p.countValid(true));
     }
 }

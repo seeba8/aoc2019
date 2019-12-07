@@ -19,13 +19,13 @@ public class Utils {
         Arrays.sort(buf);
         List<int[]> permutations = new ArrayList<>();
         permutations.add(buf.clone());
-        while(true) {
+        while (true) {
             int k = len - 2;
             while (buf[k] > buf[k + 1]) {
                 k--;
                 if (k == -1) return permutations.toArray(new int[][]{});
             }
-            int l = len-1;
+            int l = len - 1;
             while (buf[l] < buf[k]) {
                 l--;
             }
@@ -34,15 +34,15 @@ public class Utils {
             buf[k] = buf[l];
             buf[l] = tmp;
 
-            reverse(buf, k+1);
+            reverse(buf, k + 1);
             permutations.add(buf.clone());
         }
     }
 
     private static void reverse(int[] arr, int startIndex) {
         int[] buf = arr.clone();
-        for(int i = startIndex; i < arr.length; i++) {
-            arr[i] = buf[buf.length - (i-startIndex) - 1];
+        for (int i = startIndex; i < arr.length; i++) {
+            arr[i] = buf[buf.length - (i - startIndex) - 1];
         }
     }
 

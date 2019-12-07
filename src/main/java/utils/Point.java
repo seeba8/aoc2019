@@ -21,8 +21,7 @@ public class Point<T> {
             @SuppressWarnings("unchecked")
             Point<T> other = (Point<T>) obj;
             return this.x == other.x && this.y == other.y;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
