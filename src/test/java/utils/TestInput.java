@@ -33,7 +33,7 @@ public class TestInput {
     }
 
     @Test
-    public void testlinesSplit() {
+    public void testLinesSplit() {
         try {
             String[][] result = Input.getLinesSplit("day3.txt",",");
             assertEquals(2,result.length);
@@ -45,6 +45,17 @@ public class TestInput {
             e.printStackTrace();
             fail();
         }
+    }
 
+    @Test
+    public void testEmptySeparator() {
+        int[] result = new int[]{};
+        try {
+            result = Input.getIntArrayFromSingleLine("day8.txt","");
+        } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
+            fail();
+        }
+        assertArrayEquals(new int[]{1,2,2,2,2}, Arrays.copyOf(result,5));
     }
 }

@@ -24,7 +24,7 @@ public class Input {
         Path p = Paths.get(Input.class.getClassLoader().getResource(filename).toURI());
         return Files.readAllLines(p)
                 .get(0)
-                .split(",");
+                .split(separator);
     }
 
     public static int[] getIntArrayFromSingleLine(String filename, String separator) throws IOException, URISyntaxException {
