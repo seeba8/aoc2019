@@ -40,7 +40,14 @@ public class TestIntcodeWithRelativeAddresses {
     public void test16DigitNumber() {
         AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(new int[]{1102, 34915192, 34915192, 7, 4, 7, 99, 0}, 0);
         c.run();
-        System.err.println(outContent.toString().trim());
         assertEquals(16, outContent.toString().trim().length());
+    }
+
+    @Test
+    public void testLargeNumber() {
+        long[] programme = new long[]{104, 1125899906842624L, 99};
+        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(programme, 0);
+        c.run();
+        assertEquals(programme[1],Long.parseLong(outContent.toString().trim()));
     }
 }

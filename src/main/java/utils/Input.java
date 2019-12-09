@@ -33,6 +33,12 @@ public class Input {
                 .toArray();
     }
 
+    public static long[] getLongArrayFromSingleLine(String filename, String separator) throws IOException, URISyntaxException {
+        return Arrays.stream(getStringArrayFromSingleLine(filename, separator))
+                .mapToLong(Long::parseLong)
+                .toArray();
+    }
+
     public static String[] getLines(String filename) throws IOException, URISyntaxException {
         Path p = Paths.get(Input.class.getClassLoader().getResource(filename).toURI());
         return Files.readAllLines(p).toArray(new String[]{});

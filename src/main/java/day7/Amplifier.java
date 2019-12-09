@@ -29,7 +29,7 @@ public class Amplifier extends AdvancedIntcodeComputer {
     }
 
     @Override
-    public int run() {
+    public long run() {
         super.run();
         return out;
     }

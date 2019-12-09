@@ -13,7 +13,7 @@ public class ThrusterController {
         Amplifier a;
         for (int i = 0; i < phaseSetting.length; i++) {
             a = new Amplifier(intcode.clone(), phaseSetting[i], output);
-            output = a.run();
+            output = (int)a.run();
         }
         return output;
     }
