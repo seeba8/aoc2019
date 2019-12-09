@@ -24,8 +24,8 @@ public class Amplifier extends AdvancedIntcodeComputer {
     }
 
     @Override
-    protected void output(int value) {
-        out = value;
+    protected void output(long value) {
+        out = (int)value;
     }
 
     @Override
@@ -35,8 +35,8 @@ public class Amplifier extends AdvancedIntcodeComputer {
     }
 
     @Override
-    protected int getInput() {
-        int buf = super.getInput();
+    protected long getInput() {
+        int buf = (int)super.getInput();
         setInput(secondInput);
         return buf;
     }

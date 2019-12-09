@@ -5,19 +5,31 @@ import utils.Input;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 public class AdvancedIntcodeComputer extends IntcodeComputer {
-    private int input;
+    private long input;
+    private long relativeBase = 0;
+    private long[] memory;
+
+    public AdvancedIntcodeComputer(long[] programme, long input) {
+        super(new int[]{});
+        this.memory = programme;
+        this.input = input;
+    }
 
     public AdvancedIntcodeComputer(int[] programme, int input) {
         super(programme);
         this.input = input;
+        this.memory = Arrays.stream(programme).mapToLong(Long::valueOf).toArray();
     }
 
     public static void main(String[] args) {
-        int[] input;
+        long[] input;
         try {
-            input = Input.getIntArrayFromSingleLine("day5.txt", ",");
+            input = Arrays.stream(Input.getIntArrayFromSingleLine("day5.txt", ","))
+                    .mapToLong(Long::valueOf)
+                    .toArray();
 
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
@@ -32,60 +44,87 @@ public class AdvancedIntcodeComputer extends IntcodeComputer {
         c.run();
     }
 
-    protected int getInput() {
+    protected long getInput() {
         return input;
     }
 
-    public void setInput(int input) {
+    public void setInput(long input) {
         this.input = input;
+    }
+
+    protected ParameterMode[] getParameterModes(long instruction) {
+        ParameterMode[] parameterModes = new ParameterMode[3];
+        for (int i = 0; i < 3; i++) {
+            int paramModeInt = (int) ((instruction % Math.pow(10, i + 3) - instruction % Math.pow(10, i + 2)) /
+                    Math.pow(10, i + 2));
+            switch (paramModeInt) {
+                case 0:
+                    parameterModes[i] = ParameterMode.POSITION;
+                    break;
+                case 1:
+                    parameterModes[i] = ParameterMode.ABSOLUTE;
+                    break;
+                case 2:
+                    parameterModes[i] = ParameterMode.RELATIVE;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Parameter mode not defined: " + paramModeInt);
+            }
+        }
+        return parameterModes;
     }
 
     @Override
     protected boolean executeOpcode() {
-        int opcode = programme[instrPointer] % 100;
-        boolean param1IsPosition = (programme[instrPointer] % 1000 - programme[instrPointer] % 100) == 0;
-        boolean param2IsPosition = (programme[instrPointer] % 10000 - programme[instrPointer] % 1000) == 0;
+        int opcode = (int)read(instrPointer) % 100;
+        ParameterMode[] parameterModes = getParameterModes(read(instrPointer));
         // boolean param3IsPosition = (programme[instrPointer] % 100000 - programme[instrPointer] % 10000) == 0;
         switch (opcode) {
             case 1:
-                programme[programme[instrPointer + 3]] = getParam1(param1IsPosition) + getParam2(param2IsPosition);
+                setParameter(instrPointer + 3, parameterModes[2], getParameter(instrPointer + 1, parameterModes[0]) +
+                        getParameter(instrPointer + 2, parameterModes[1]));
                 instrPointer += 4;
                 break;
             case 2:
-                programme[programme[instrPointer + 3]] = getParam1(param1IsPosition) * getParam2(param2IsPosition);
+                setParameter(instrPointer + 3, parameterModes[2], getParameter(instrPointer + 1, parameterModes[0]) *
+                        getParameter(instrPointer + 2, parameterModes[1]));
                 instrPointer += 4;
                 break;
             case 3:
-                programme[programme[instrPointer + 1]] = getInput();
+                setParameter(instrPointer + 1, parameterModes[0], getInput());
                 instrPointer += 2;
                 break;
             case 4:
-                output(getParam1(param1IsPosition));
+                output(getParameter(instrPointer + 1, parameterModes[0]));
                 instrPointer += 2;
                 break;
             case 5:
-                if (getParam1(param1IsPosition) != 0) {
-                    instrPointer = getParam2(param2IsPosition);
+                if (getParameter(instrPointer + 1, parameterModes[0]) != 0) {
+                    instrPointer = (int)getParameter(instrPointer + 2, parameterModes[1]);
                 } else {
                     instrPointer += 3;
                 }
                 break;
             case 6:
-                if (getParam1(param1IsPosition) == 0) {
-                    instrPointer = getParam2(param2IsPosition);
+                if (getParameter(instrPointer + 1, parameterModes[0]) == 0) {
+                    instrPointer = (int)getParameter(instrPointer + 2, parameterModes[1]);
                 } else {
                     instrPointer += 3;
                 }
                 break;
             case 7:
-                programme[programme[instrPointer + 3]] =
-                        (getParam1(param1IsPosition) < getParam2(param2IsPosition) ? 1 : 0);
+                setParameter(instrPointer + 3, parameterModes[2],
+                        (getParameter(instrPointer + 1, parameterModes[0]) < getParameter(instrPointer + 2, parameterModes[1]) ? 1 : 0));
                 instrPointer += 4;
                 break;
             case 8:
-                programme[programme[instrPointer + 3]] =
-                        (getParam1(param1IsPosition) == getParam2(param2IsPosition) ? 1 : 0);
+                setParameter(instrPointer + 3, parameterModes[2],
+                        (getParameter(instrPointer + 1, parameterModes[0]) == getParameter(instrPointer + 2, parameterModes[1]) ? 1 : 0));
                 instrPointer += 4;
+                break;
+            case 9:
+                relativeBase += getParameter(instrPointer + 1, parameterModes[0]);
+                instrPointer += 2;
                 break;
             case 99:
                 return false;
@@ -95,17 +134,55 @@ public class AdvancedIntcodeComputer extends IntcodeComputer {
         return true;
     }
 
-    protected void output(int value) {
+    protected void setParameter(long instrPointer, ParameterMode parameterMode, long value) {
+        switch (parameterMode) {
+            case POSITION:
+                //programme[programme[instrPointer]] = value;
+                write(read(instrPointer), value);
+                return;
+            case ABSOLUTE:
+                throw new IllegalArgumentException("Absolute argument may not be written to!");
+            case RELATIVE:
+                //programme[programme[instrPointer] + relativeBase] = value;
+                write(read(read(instrPointer) + relativeBase), value);
+                return;
+            default:
+                throw new IllegalArgumentException("Parameter mode not defined: " + parameterMode);
+        }
+    }
+
+    protected long getParameter(long instrPointer, ParameterMode parameterMode) {
+        switch (parameterMode) {
+            case POSITION:
+                //return programme[programme[instrPointer]];
+                return read(read(instrPointer));
+            case ABSOLUTE:
+                //return programme[instrPointer];
+                return read(instrPointer);
+            case RELATIVE:
+                //return programme[programme[instrPointer] + relativeBase];
+                return read(read(instrPointer) + relativeBase);
+            default:
+                throw new IllegalArgumentException("Parameter mode not defined: " + parameterMode);
+        }
+    }
+
+    protected void output(long value) {
         System.out.println(value);
     }
 
-    private int getParam1(boolean param1IsPosition) {
-        if (param1IsPosition) return programme[programme[instrPointer + 1]];
-        return programme[instrPointer + 1];
+    protected long read(long position) {
+        if(position > memory.length - 1) {
+            return 0;
+        }
+        return memory[(int)position];
     }
 
-    private int getParam2(boolean param2IsPosition) {
-        if (param2IsPosition) return programme[programme[instrPointer + 2]];
-        return programme[instrPointer + 2];
+    protected void write(long position, long value) {
+        if(position > memory.length - 1) {
+            memory = Arrays.copyOf(memory, (int)position + 1);
+        }
+        memory[(int)position] = value;
     }
 }
+

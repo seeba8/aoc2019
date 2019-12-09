@@ -1,5 +1,7 @@
 package day7;
 
+import day5.ParameterMode;
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Queue;
@@ -24,29 +26,28 @@ public class FeedbackLoopAmplifier extends Amplifier {
     }
 
     @Override
-    protected void output(int value) {
+    protected void output(long value) {
         nextAmp.setInput(value);
     }
 
     @Override
-    protected int getInput() {
+    protected long getInput() {
         return inputQueue.remove();
     }
 
     @Override
-    public void setInput(int value) {
-        inputQueue.add(value);
+    public void setInput(long value) {
+        inputQueue.add((int)value);
     }
 
     @Override
     protected boolean executeOpcode() {
-        int opcode = programme[instrPointer] % 100;
-        boolean param1IsPosition = (programme[instrPointer] % 1000 - programme[instrPointer] % 100) == 0;
-        boolean param2IsPosition = (programme[instrPointer] % 10000 - programme[instrPointer] % 1000) == 0;
+        int opcode = (int)read(instrPointer) % 100;
+        ParameterMode[] parameterModes = getParameterModes(read(instrPointer));
         switch (opcode) {
             case 3:
                 try {
-                    programme[programme[instrPointer + 1]] = getInput();
+                    setParameter(instrPointer + 1, parameterModes[0],(int)getInput());
                 } catch (NoSuchElementException e) {
                     return false;
                 }

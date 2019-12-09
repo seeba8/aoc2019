@@ -41,7 +41,7 @@ public class ThrusterController {
             ;
             currentAmp = (currentAmp + 1) % phaseSetting.length;
         }
-        return amplifiers[0].getInput();
+        return (int)amplifiers[0].getInput();
     }
 
     public static void main(String[] args) {
