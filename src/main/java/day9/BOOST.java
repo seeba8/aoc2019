@@ -5,7 +5,6 @@ import utils.Input;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 public class BOOST {
     public static void main(String[] args) {
@@ -17,7 +16,11 @@ public class BOOST {
             e.printStackTrace();
             return;
         }
-        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(input, 1);
+        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(input.clone(), 1);
+        System.out.println("Test mode:");
+        c.run();
+        c = new AdvancedIntcodeComputer(input, 2);
+        System.out.println("Sensor boost mode:");
         c.run();
     }
 }
