@@ -18,4 +18,14 @@ public class TestUtils {
                 new int[]{0,1,3,2,4}
         }, Arrays.copyOfRange(Utils.getPermutations(i),0,3));
     }
+
+    @Test
+    public void testFactorial() {
+        assertEquals(1,Utils.factorial(1));
+        assertEquals(2,Utils.factorial(2));
+        assertEquals(6,Utils.factorial(3));
+        assertEquals(24,Utils.factorial(4));
+        assertEquals(120,Utils.factorial(5));
+        assertEquals(720,Utils.factorial(6));
+    }
 }

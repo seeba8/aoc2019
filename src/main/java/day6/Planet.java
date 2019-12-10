@@ -18,7 +18,7 @@ public class Planet {
         return name;
     }
 
-    public Planet getSatelliteByName(String name) {
+    /*public Planet getSatelliteByName(String name) {
         for (Planet p : satellites) {
             if (p.getName().equals(name)) {
                 return p;
@@ -27,7 +27,7 @@ public class Planet {
             if (child != null) return child;
         }
         return null;
-    }
+    }*/
 
     public Planet getStar() {
         return star;
@@ -64,13 +64,13 @@ public class Planet {
         return satellites.size();
     }
 
-    public int getNumberOfIndirectSatellites() {
+    /*public int getNumberOfIndirectSatellites() {
         int s = getNumberOfDirectSatellites();
         for (Planet p : satellites) {
             s += p.getNumberOfIndirectSatellites();
         }
         return s;
-    }
+    }*/
 
     public int getNumberOfOrbits() {
         if (star == null) return 0;
