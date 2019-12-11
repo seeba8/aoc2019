@@ -103,7 +103,6 @@ public class TestAsteroidMap {
                 "..#.....X...###..\n" +
                 "..#.#.....#....##").split("\n"));
         Map<Double, Set<Asteroid>> asteroidAngles = map.getAsteroidAngles(new Asteroid(8, 3));
-        System.out.println("hi");
     }
 
     @Test
