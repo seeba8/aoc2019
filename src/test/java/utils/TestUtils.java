@@ -28,4 +28,17 @@ public class TestUtils {
         assertEquals(120,Utils.factorial(5));
         assertEquals(720,Utils.factorial(6));
     }
+
+    @Test
+    public void testGCD() {
+        assertEquals(6, Utils.gcd(48, 18));
+        assertEquals(6, Utils.gcd(18, 48));
+        assertEquals(12, Utils.gcd(48, 180));
+    }
+
+    @Test
+    public void testLCM() {
+        assertEquals(252, Utils.lcm(18,28));
+        assertEquals(2772, Utils.lcm(new long[]{18,28,44}));
+    }
 }

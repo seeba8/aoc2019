@@ -1,8 +1,10 @@
 package day12;
 
 import utils.Input;
+import utils.Utils;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -14,7 +16,7 @@ class FasterPlanetSimulation {
     final int NUM_AXES = 3;
     /**
      * Every 6 Integers starts a new Moon. Each moon has 3 position coordinates and 3 velocity coordinates: <br/>
-     * (pos_x, pos_y, pos_z, vel_x, vel_y, vel_z)
+     * (pos_x, vel_x,  pos_y, vel_y, pos_z, vel_z)
      */
     int[] state;
 
@@ -43,7 +45,9 @@ class FasterPlanetSimulation {
         }
         FasterPlanetSimulation j = new FasterPlanetSimulation(input);
         j.simulate(1000);
-        System.out.printf("Total energy after 1000 steps is %d", j.getTotalEnergy());
+        System.out.printf("Total energy after 1000 steps is %d\n", j.getTotalEnergy());
+        j = new FasterPlanetSimulation(input);
+        System.out.println("j.getNumberOfStepsUntilRepeat() = " + j.getNumberOfStepsUntilRepeat());
     }
 
     void simulate(long howOften) {
@@ -105,21 +109,30 @@ class FasterPlanetSimulation {
     }
 
     long getNumberOfStepsUntilRepeat() {
-        Set<List<Integer>> states = new HashSet<>();
-        int[] currentState;
-        long numSteps = 0;
-        while (true) {
+        int[] initialState = state.clone();
+        long[] phaseLengths = new long[NUM_AXES];
 
-            simulate(1);
-            currentState = Arrays.copyOf(state, state.length);
-            // int totalEnergy = getTotalEnergy();
-            if (!states.add(Arrays.stream(currentState).boxed().collect(Collectors.toList()))) { // returns false if the set already contains the element
-                return numSteps;
+        for(int axis = 0; axis < NUM_AXES; axis++) {
+            Set<List<Integer>> axisStates = new HashSet<>();
+            long count = 0;
+            state = initialState.clone();
+
+            while(addAxisState(axisStates, axis)) {
+                simulate();
+                count++;
             }
-            numSteps++;
-            if(numSteps % 1_000_000 == 0) {
-                System.out.printf("%,d\n", numSteps);
-            }
+            phaseLengths[axis] = count;
         }
+        return Utils.lcm(phaseLengths);
     }
+
+    private boolean addAxisState(Set<List<Integer>> axisStates, int axis) {
+        Integer[] axisState = new Integer[2 * NUM_MOONS];
+        for (int i = 0; i < NUM_MOONS * 2; i += 2) {
+            axisState[i] = state[2 * axis + NUM_AXES * i];
+            axisState[i + 1] = state[2 * axis + NUM_AXES * i + 1];
+        }
+        return axisStates.add(Arrays.asList(axisState));
+    }
+
 }

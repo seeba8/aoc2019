@@ -37,16 +37,6 @@ public class TestFasterPlanetSimulation {
         assertEquals(1940, j.getTotalEnergy());
     }
 
-    /*
-    @Test
-    public void testHowLongALotOfSimulationTakes() {
-        FasterPlanetSimulation j = new FasterPlanetSimulation(("<x=-8, y=-10, z=0>\n" +
-                "<x=5, y=5, z=10>\n" +
-                "<x=2, y=-7, z=3>\n" +
-                "<x=9, y=-8, z=-3>").split("\n"));
-        j.simulate(4_686_774_924L);
-    }
-    */
     @Test
     public void testUntilLoop() {
         FasterPlanetSimulation j = new FasterPlanetSimulation(new String[]{
@@ -55,13 +45,13 @@ public class TestFasterPlanetSimulation {
         assertEquals(2772, j.getNumberOfStepsUntilRepeat());
     }
 
-    //@Test
+    @Test
     public void testManyStepsUntilLoop() {
         FasterPlanetSimulation j = new FasterPlanetSimulation(("<x=-8, y=-10, z=0>\n" +
                 "<x=5, y=5, z=10>\n" +
                 "<x=2, y=-7, z=3>\n" +
                 "<x=9, y=-8, z=-3>").split("\n"));
-        j.simulate(4_686_774_924L);
+        assertEquals(4686774924L, j.getNumberOfStepsUntilRepeat());
     }
 
     //@Test

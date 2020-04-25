@@ -53,4 +53,35 @@ public class Utils {
         return number * factorial(number - 1);
 
     }
+
+    public static long gcd(long a, long b) {
+        // https://en.wikipedia.org/wiki/Greatest_common_divisor#Calculation
+        if (b > a) return gcd(b, a);
+        if(a % b == 0)  return b;
+        return gcd(b, a % b);
+    }
+
+    public static long gcd(long[] values) {
+        if(values.length < 2) throw new IllegalArgumentException("Array needs to be 2 or longer");
+        long gcd = gcd(values[0], values[1]);
+        for (int i = 2; i < values.length; i++) {
+            gcd = gcd(gcd, values[i]);
+        }
+        return gcd;
+    }
+
+    public static long lcm(long a, long b) {
+        // https://stackoverflow.com/a/4202114
+        if (b > a) return lcm(b, a);
+        return a * (b / gcd(a, b));
+    }
+
+    public static long lcm(long[] values) {
+        if(values.length < 2) throw new IllegalArgumentException("Array needs to be 2 or longer");
+        long lcm = lcm(values[0], values[1]);
+        for (int i = 2; i < values.length; i++) {
+            lcm = lcm(lcm, values[i]);
+        }
+        return lcm;
+    }
 }
