@@ -1,6 +1,7 @@
 package day9;
 
 import day5.AdvancedIntcodeComputer;
+import day5.DiagnosticComputer;
 import utils.Input;
 
 import java.io.IOException;
@@ -16,10 +17,10 @@ public class BOOST {
             e.printStackTrace();
             return;
         }
-        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(input.clone(), 1);
+        AdvancedIntcodeComputer c = new DiagnosticComputer(input.clone(), 1);
         System.out.println("Test mode:");
         c.run();
-        c = new AdvancedIntcodeComputer(input, 2);
+        c = new DiagnosticComputer(input, 2);
         System.out.println("Sensor boost mode:");
         c.run();
     }

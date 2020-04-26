@@ -1,13 +1,9 @@
 package day5;
 
-import utils.Input;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
-public class AdvancedIntcodeComputer {
-    private long input;
+public abstract class AdvancedIntcodeComputer {
+    protected long input;
     private long relativeBase = 0;
     private long[] memory;
     protected int instrPointer;
@@ -17,41 +13,15 @@ public class AdvancedIntcodeComputer {
         this.input = input;
     }
 
-    public AdvancedIntcodeComputer(int[] programme, int input) {
-        this.input = input;
-        this.memory = Arrays.stream(programme).mapToLong(Long::valueOf).toArray();
-    }
-
-    public static void main(String[] args) {
-        long[] input;
-        try {
-            input = Input.getLongArrayFromSingleLine("day5.txt", ",");
-
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
-            return;
-        }
-        System.out.println("Diagnostic code of Aircon: ");
-        AdvancedIntcodeComputer c = new AdvancedIntcodeComputer(input.clone(), 1);
-        c.run();
-
-        System.out.println("Diagnostic code of thermal radiator controller:");
-        c = new AdvancedIntcodeComputer(input.clone(), 5);
-        c.run();
-    }
-
     public long run() {
         instrPointer = 0;
         while (true) {
             if (!executeOpcode()) break;
         }
-        ;
         return this.memory[0];
     }
 
-    protected long getInput() {
-        return input;
-    }
+    protected abstract long getInput();
 
     public void setInput(long input) {
         this.input = input;
@@ -154,7 +124,7 @@ public class AdvancedIntcodeComputer {
         }
     }
 
-    protected long getParameter(long instrPointer, ParameterMode parameterMode) {
+    private long getParameter(long instrPointer, ParameterMode parameterMode) {
         switch (parameterMode) {
             case POSITION:
                 return read(read(instrPointer));
@@ -167,9 +137,7 @@ public class AdvancedIntcodeComputer {
         }
     }
 
-    protected void output(long value) {
-        System.out.println(value);
-    }
+    protected abstract void output(long value);
 
     protected long read(long position) {
         if (position > memory.length - 1) {
@@ -178,7 +146,7 @@ public class AdvancedIntcodeComputer {
         return memory[(int) position];
     }
 
-    protected void write(long position, long value) {
+    private void write(long position, long value) {
         if (position > memory.length - 1) {
             memory = Arrays.copyOf(memory, (int) position + 1);
         }

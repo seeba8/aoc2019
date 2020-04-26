@@ -4,13 +4,14 @@ import day5.AdvancedIntcodeComputer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 public class Amplifier extends AdvancedIntcodeComputer {
     private int out;
     private int secondInput = 0;
 
     public Amplifier(int[] programme, int phase) {
-        super(programme, phase);
+        super(Arrays.stream(programme).mapToLong(Long::valueOf).toArray(), phase);
     }
 
     /**
@@ -19,7 +20,7 @@ public class Amplifier extends AdvancedIntcodeComputer {
      * @param input     Output from the previous amplifier, or 0 in the first round
      */
     public Amplifier(int[] programme, int phase, int input) {
-        super(programme, phase);
+        super(Arrays.stream(programme).mapToLong(Long::valueOf).toArray(), phase);
         secondInput = input;
     }
 
@@ -36,7 +37,7 @@ public class Amplifier extends AdvancedIntcodeComputer {
 
     @Override
     protected long getInput() {
-        int buf = (int)super.getInput();
+        int buf = (int)input;
         setInput(secondInput);
         return buf;
     }
