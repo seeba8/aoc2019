@@ -28,11 +28,12 @@ public class ArcadeComputer extends AdvancedIntcodeComputer {
     @Override
     protected long getInput() {
         if(MANUAL) {
-            printScreen();
+            System.out.println(printScreen());
             System.out.println("-1 <-- 0 --> 1");
             Scanner sc = new Scanner(System.in);
             return sc.nextLong();
         }
+        // System.out.println(printScreen());
         return ball.x.compareTo(paddle.x); // -1 if smaller, +1 if larger, 0 if equal
     }
 
@@ -40,17 +41,17 @@ public class ArcadeComputer extends AdvancedIntcodeComputer {
     public void output(long value) {
         if(nextOutputPosition == 0) {
             bufx = (int)value;
-            minX = Math.min(minX, bufx);
-            maxX = Math.max(maxX, bufx);
         } else if(nextOutputPosition == 1) {
             bufy = (int)value;
-            minY = Math.min(minY, bufy);
-            maxY = Math.max(maxY, bufy);
         } else {
             Point<Integer> p = new Point<>(bufx, bufy);
             if(p.equals(new Point<Integer>(-1,0))) { // scoreboard
                 score = (int)value;
             } else {
+                minX = Math.min(minX, bufx);
+                maxX = Math.max(maxX, bufx);
+                minY = Math.min(minY, bufy);
+                maxY = Math.max(maxY, bufy);
                 Tile t = Tile.getTile((int)value);
                 screen.put(p, t);
                 if(t == Tile.BALL) {
@@ -63,21 +64,21 @@ public class ArcadeComputer extends AdvancedIntcodeComputer {
         nextOutputPosition = (nextOutputPosition + 1) % 3;
     }
 
-    public void printScreen() {
+    public String printScreen() {
         StringBuilder s = new StringBuilder((maxX - minX + 1) * (maxY - minY + 1));
         // fill with spaces
         for (int i = 0; i < s.capacity(); i++) {
             s.insert(i, " ");
         }
         for(Map.Entry<Point<Integer>, Tile> entry : screen.entrySet()) {
-            s.setCharAt((entry.getKey().y - minY) * (maxX - minX) + (entry.getKey().x - minX),
+            s.setCharAt((entry.getKey().y - minY) * (maxX - minX + 1) + (entry.getKey().x - minX),
                     entry.getValue().getChar());
         }
         // go from back to front in order to have the index easier
         for(int i = maxY - minY ; i > 0; i--) {
-            s.insert(i * (maxX - minX) , "\n");
+            s.insert(i * (maxX - minX + 1), "\n");
         }
-        System.out.println(s.toString());
+        return s.toString().trim();
     }
 
     public long countTiles(Tile type) {
@@ -95,7 +96,7 @@ public class ArcadeComputer extends AdvancedIntcodeComputer {
 
         ArcadeComputer ac = new ArcadeComputer(input.clone());
         ac.run();
-        ac.printScreen();
+        System.out.println(ac.printScreen());
         System.out.printf("Blocks: %s\n", ac.countTiles(Tile.BLOCK));
 
         System.out.println("PART 2");

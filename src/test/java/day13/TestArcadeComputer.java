@@ -22,6 +22,18 @@ public class TestArcadeComputer {
 
         ArcadeComputer ac = new ArcadeComputer(input);
         ac.run();
-        assertEquals(286, ac.countTiles(Tile.BLOCK));
+        assertEquals(83, ac.countTiles(Tile.WALL));
+    }
+
+    @Test
+    public void testPrintScreen() {
+        ArcadeComputer ac = new ArcadeComputer(new long[]{});
+        ac.output(0); ac.output(0); ac.output(1); //(0,0) WALL
+        ac.output(1); ac.output(0); ac.output(1); //(1,0) WALL
+        ac.output(2); ac.output(0); ac.output(1); //(2,0) WALL
+        ac.output(0); ac.output(1); ac.output(1); //(0,1) WALL
+        ac.output(0); ac.output(2); ac.output(1); //(0,2) WALL
+        ac.output(2); ac.output(2); ac.output(4); //(2,2) BALL
+        assertEquals("XXX\nX  \nX O", ac.printScreen());
     }
 }
