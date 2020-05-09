@@ -15,4 +15,14 @@ public class TestPoint {
         //assertSame(a,b);
         //assertTrue(a==b);
     }
+
+    @Test
+    public void testPointClone() {
+        Point<Integer> a = new Point<>(0, 0);
+        Point<Integer> clone = a.clone();
+        a.x = 1;
+        assertEquals(new Point<Integer>(0,0), clone);
+        assertEquals(0, clone.x.intValue());
+
+    }
 }

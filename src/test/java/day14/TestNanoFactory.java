@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 public class TestNanoFactory {
 
@@ -117,10 +118,10 @@ public class TestNanoFactory {
         assertEquals(r, nf.getRecipeProducingOutput("AB"));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test()
     public void testNoRecipeFound() {
         NanoFactory exampleTwoRecipes = getExampleTwoRecipes();
-        exampleTwoRecipes.getRecipeProducingOutput("NO");
+        assertThrows(NoSuchElementException.class, () -> exampleTwoRecipes.getRecipeProducingOutput("NO"));
     }
 
     @Test

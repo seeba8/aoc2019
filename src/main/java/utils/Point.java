@@ -2,13 +2,26 @@ package utils;
 
 import java.util.Objects;
 
-public class Point<T> {
+public class Point<T> implements Cloneable {
     public T x;
     public T y;
 
     public Point(T x, T y) {
         this.x = x;
         this.y = y;
+    }
+
+    @Override
+    public Point<T> clone() {
+        Point<T> clone;
+        try {
+            clone = (Point<T>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone didn't work...");
+        }
+        clone.x = x;
+        clone.y = y;
+        return clone;
     }
 
     @Override
