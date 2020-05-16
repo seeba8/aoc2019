@@ -84,4 +84,12 @@ public class Utils {
         }
         return lcm;
     }
+
+    public static int multiplyAndAdd(int[] a1, int[] a2) {
+        int sum = 0;
+        for (int i = 0; i < Math.max(a1.length, a2.length); i++) {
+            sum += (a1.length <= i ? 0 : a1[i]) * (a2.length <= i ? 0 : a2[i]);
+        }
+        return sum;
+    }
 }
