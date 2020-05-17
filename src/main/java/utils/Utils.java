@@ -85,11 +85,20 @@ public class Utils {
         return lcm;
     }
 
-    public static int multiplyAndAdd(int[] a1, int[] a2) {
+    public static int dotProduct(int[] a1, int[] a2) {
         int sum = 0;
         for (int i = 0; i < Math.max(a1.length, a2.length); i++) {
             sum += (a1.length <= i ? 0 : a1[i]) * (a2.length <= i ? 0 : a2[i]);
         }
         return sum;
     }
+
+    public static int dotProductModulo(int[] a1, int[] a2) {
+        int sum = 0;
+        for (int i = 0; i < Math.max(a1.length, a2.length); i++) {
+            sum += a1[i % a1.length] * a2[i % a2.length];
+        }
+        return sum;
+    }
+
 }

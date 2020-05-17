@@ -43,9 +43,15 @@ public class TestUtils {
     }
 
     @Test
-    public void testMultiplyAndAdd() {
-        assertEquals(14 + 18 + 20, Utils.multiplyAndAdd(new int[]{2, 3, 4}, new int[]{7, 6, 5}));
-        assertEquals(14 + 18 + 20 + 0, Utils.multiplyAndAdd(new int[]{2, 3, 4}, new int[]{7, 6, 5, 10}));
-        assertEquals(0, Utils.multiplyAndAdd(new int[]{}, new int[]{1, 2, 3}));
+    public void testdotProduct() {
+        assertEquals(14 + 18 + 20, Utils.dotProduct(new int[]{2, 3, 4}, new int[]{7, 6, 5}));
+        assertEquals(14 + 18 + 20 + 0, Utils.dotProduct(new int[]{2, 3, 4}, new int[]{7, 6, 5, 10}));
+        assertEquals(0, Utils.dotProduct(new int[]{}, new int[]{1, 2, 3}));
+    }
+
+    @Test
+    public void testdotProductModulo() {
+        assertEquals(2 * 7 + 3 * 6 + 4 * 5, Utils.dotProductModulo(new int[]{2, 3, 4}, new int[]{7, 6, 5}));
+        assertEquals(2 * 7 + 3 * 6 + 4 * 5 + 2 * 10, Utils.dotProductModulo(new int[]{2, 3, 4}, new int[]{7, 6, 5, 10}));
     }
 }
