@@ -1,9 +1,10 @@
 package day3;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import utils.Point;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class TestWire {
     @Test
@@ -113,11 +114,11 @@ public class TestWire {
         assertEquals(5, v.intersectDistance(h));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testDoNotIntersect() {
         Wire h = new Wire(0, 10, 5, 5);
         Wire v = new Wire(0, 10, 0, 4);
-        h.intersectDistance(v);
+        assertThrows(IllegalStateException.class, () -> h.intersectDistance(v));
     }
     // Missing tests with negative + positive coordinates
 

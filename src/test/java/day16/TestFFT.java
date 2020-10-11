@@ -1,11 +1,10 @@
 package day16;
 
-import org.junit.Test;
 
-import java.util.Arrays;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestFFT {
     /*public void testGetPattern() {
@@ -26,17 +25,17 @@ public class TestFFT {
     @Test
     public void testLongerExamples() {
         FFT fft = FFT.fromString("80871224585914546619083218645595");
-        fft.calculatePhases(100);
+        fft.calculatePhases(100, false);
         assertArrayEquals(new int[]{2, 4, 1, 7, 6, 1, 7, 6},
                 fft.getSliceAtOffset(0, 8));
 
         fft = FFT.fromString("19617804207202209144916044189917");
-        fft.calculatePhases(100);
+        fft.calculatePhases(100, false);
         assertArrayEquals(new int[]{7, 3, 7, 4, 5, 4, 1, 8},
                 fft.getSliceAtOffset(0, 8));
 
         fft = FFT.fromString("69317163492948606335995924319873");
-        fft.calculatePhases(100);
+        fft.calculatePhases(100, false);
         assertArrayEquals(new int[]{5, 2, 4, 3, 2, 1, 3, 3},
                 fft.getSliceAtOffset(0, 8));
     }
@@ -54,11 +53,24 @@ public class TestFFT {
     }
 
     @Test
-    public void testExamplePart2() {
-        FFT fft = FFT.fromString("03036732577212944063491565474664", 1_00);
-        fft.calculatePhases(100);
+    public void testExamplePart2_1() {
+        FFT fft = FFT.fromString("03036732577212944063491565474664", 10000);
+        fft.calculatePhases(100, true);
         assertArrayEquals(new int[]{8, 4, 4, 6, 2, 0, 2, 6}, fft.getSliceAtOffset(fft.getPart2Offset(), 8));
     }
 
+    @Test
+    public void testExamplePart2_2() {
+        FFT fft = FFT.fromString("02935109699940807407585447034323", 10000);
+        fft.calculatePhases(100, true);
+        assertArrayEquals(new int[]{7, 8, 7, 2, 5, 2, 7, 0}, fft.getSliceAtOffset(fft.getPart2Offset(), 8));
+    }
+
+    @Test
+    public void testExamplePart2_3() {
+        FFT fft = FFT.fromString("03081770884921959731165446850517", 10000);
+        fft.calculatePhases(100, true);
+        assertArrayEquals(new int[]{5, 3, 5, 5, 3, 7, 3, 1}, fft.getSliceAtOffset(fft.getPart2Offset(), 8));
+    }
 
 }

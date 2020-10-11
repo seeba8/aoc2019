@@ -3,7 +3,6 @@ package day10;
 import utils.Point;
 
 import java.util.Collection;
-import java.util.Set;
 
 public class Asteroid extends Point<Integer> {
 

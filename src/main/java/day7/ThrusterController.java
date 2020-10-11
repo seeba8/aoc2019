@@ -5,7 +5,6 @@ import utils.Utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collections;
 
 public class ThrusterController {
     public static int thrustSignal(int[] intcode, int[] phaseSetting) {

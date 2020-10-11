@@ -1,6 +1,7 @@
 package day16;
 
 import utils.Input;
+import utils.Utils;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -9,10 +10,12 @@ import java.util.Arrays;
 public class FFT {
     private int[] signal;
     private int part2Offset = 0;
+    private int realLength = 0;
     //private int[][] patternCache;
 
     FFT(int[] inputSignal) {
         this.signal = inputSignal;
+        realLength = this.signal.length;
         calculateOffset();
     }
 
@@ -34,8 +37,12 @@ public class FFT {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
         FFT fft = FFT.fromString(Input.getLines("day16.txt")[0]);
-        fft.calculatePhases(100);
+        fft.calculatePhases(100, false);
         System.out.println(Arrays.toString(fft.getSliceAtOffset(0, 8)));
+        fft = FFT.fromString(Input.getLines("day16.txt")[0], 10_000);
+        fft.calculatePhases(100, true);
+        System.out.println(Arrays.toString(fft.getSliceAtOffset(fft.getPart2Offset(), 8)));
+
     }
 
     private void calculateOffset() {
@@ -56,15 +63,103 @@ public class FFT {
         return signal;
     }
 
-    void calculatePhases(int numberOfPhases) {
+
+    void calculatePhases(int numberOfPhases, boolean startFromOffset) {
         for (int i = 0; i < numberOfPhases; i++) {
-            calculateNextPhase();
+            calculateNextPhase(startFromOffset);
             System.out.println(i);
             //System.out.println(Arrays.toString(getSliceAtOffset(0, 8)));
         }
     }
 
+    int[] calculateNextPhase(boolean startFromOffset) {
+        if (!startFromOffset) return calculateNextPhase();
+        if ((part2Offset * 1.) / signal.length > .5) {
+            /*
+             * We start after 50% of the length. This means that we only need to consider the pattern +1 (since the next
+             * {offset} elements of the pattern are +1.
+             */
+            for (int i = part2Offset; i < signal.length; i++) {
+                int sum = 0;
+                /*
+                 * This could be solved via Array.stream(signal, offset, length).sum() but that is interestingly much
+                 * slower after the first few iterations. The internet seems to imply that this is caused by the
+                 * compiler's in-lining having a limit.
+                 */
+                for (int j = i; j < signal.length; j++) {
+                    sum += signal[j];
+                }
+                signal[i] = Math.abs(sum % 10);
+            }
+            return signal;
+        }
+        /*
+         * We can ignore all values in the array before the offset since they do not influence the values after the
+         * offset due to being multiplied by 0
+         */
+        for (int i = part2Offset; i < signal.length; i++) {
+            int sum = 0;
+            int factor = 1;
+            int j = i;
+            long lcm = Math.min(Utils.lcm(4 * (i + 1), realLength), signal.length);
+            while (j < lcm) {
+                int smallerThanRest = (j < signal.length % lcm ? 1 : 0);
+
+                sum += signal[j] * factor * (signal.length / lcm + smallerThanRest);
+                if ((j + 2) % (2 * i + 2) == 0) {
+                    j += i + 2;
+                    factor *= -1;
+                } else {
+                    j++;
+                }
+            }
+            signal[i] = Math.abs(sum % 10);
+        }
+        return signal;
+    }
+
     int[] calculateNextPhase() {
+        for (int i = 0; i < signal.length; i++) {
+            int sum = 0;
+            int factor = 1;
+            int j = i;
+            long lcm = Math.min(Utils.lcm(4 * (i + 1), realLength), signal.length);
+            while (j < lcm) {
+                int smallerThanRest = (j < signal.length % lcm ? 1 : 0);
+
+                sum += signal[j] * factor * (signal.length / lcm + smallerThanRest);
+                if ((j + 2) % (2 * i + 2) == 0) {
+                    j += i + 2;
+                    factor *= -1;
+                } else {
+                    j++;
+                }
+            }
+            signal[i] = Math.abs(sum % 10);
+        }
+        return signal;
+    }
+
+    int[] calculateNextPhase3() {
+        for (int i = 0; i < signal.length; i++) {
+            int sum = 0;
+            int factor = 1;
+            int j = i;
+            while (j < signal.length) {
+                sum += signal[j] * factor;
+                if ((j + 2) % (2 * i + 2) == 0) {
+                    j += i + 2;
+                    factor *= -1;
+                } else {
+                    j++;
+                }
+            }
+            signal[i] = Math.abs(sum % 10);
+        }
+        return signal;
+    }
+
+    int[] calculateNextPhase2() {
         int[] basePattern = new int[]{0, 1, 0, -1};
         //if (patternCache == null) fillPatternCache();
         for (int i = 0; i < signal.length; i++) {

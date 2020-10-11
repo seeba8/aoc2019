@@ -2,8 +2,6 @@ package day7;
 
 import day5.AdvancedIntcodeComputer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.Arrays;
 
 public class Amplifier extends AdvancedIntcodeComputer {

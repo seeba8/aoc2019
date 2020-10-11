@@ -1,11 +1,11 @@
 package day14;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.NoSuchElementException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestNanoFactory {
 
@@ -118,7 +118,7 @@ public class TestNanoFactory {
         assertEquals(r, nf.getRecipeProducingOutput("AB"));
     }
 
-    @Test()
+    @Test
     public void testNoRecipeFound() {
         NanoFactory exampleTwoRecipes = getExampleTwoRecipes();
         assertThrows(NoSuchElementException.class, () -> exampleTwoRecipes.getRecipeProducingOutput("NO"));

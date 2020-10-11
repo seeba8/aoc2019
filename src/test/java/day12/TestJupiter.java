@@ -1,9 +1,9 @@
 package day12;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import utils.Point3D;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestJupiter {
 
