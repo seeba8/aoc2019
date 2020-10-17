@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Utils {
@@ -98,6 +99,15 @@ public class Utils {
             sum += a1[i % a1.length] * a2[i % a2.length];
         }
         return sum;
+    }
+
+    public static List<Long> charArrayToLongArray(char[] a) {
+        List<Long> l = new ArrayList<>();
+        for (char x : a) {
+            l.add((long) x);
+        }
+        return l.stream().mapToLong(Long::longValue).boxed().collect(Collectors.toList());
+
     }
 
 }
